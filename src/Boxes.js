@@ -4,11 +4,11 @@ import './Boxes.css';
 import { randomHexStr } from './helpers.js';
 
 export default class Boxes extends Component {
-  static defaultProps = { numBoxes : 16, hexLength : 6 }
+  static defaultProps = { numBoxes : 16 }
   constructor(props) {
     super(props);
     const arr = Array.from({length : this.props.numBoxes}).map(() => {
-      return randomHexStr(this.props.hexLength)
+      return randomHexStr(6)
     })
     this.state = { boxes : [...arr] };
     this.changeColor = this.changeColor.bind(this);
@@ -23,7 +23,7 @@ export default class Boxes extends Component {
   pickNewColor(oldColor) {
     let newColor = '';
     do {
-      newColor = randomHexStr(this.props.hexLength);
+      newColor = randomHexStr(6);
     } while (newColor === oldColor)
     return newColor;
   }
