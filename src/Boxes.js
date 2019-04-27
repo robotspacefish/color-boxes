@@ -1,30 +1,31 @@
 import React, { Component } from 'react'
 import Box from './Box';
 import './Boxes.css';
-import { randomChar } from './helpers.js';
+import { randomHexStr } from './helpers.js';
 
 export default class Boxes extends Component {
+  static defaultProps = { numBoxes : 16, hexLength : 6 }
   constructor(props) {
     super(props);
-    const arr = [];
-    arr.length = 16;
-    arr.fill('FFFFFF')
-
-    this.state = {
-      boxes : [...arr]
-    };
+    const arr = Array.from({length : this.props.numBoxes}).map(() => {
+      return randomHexStr(this.props.hexLength)
+    })
+    this.state = { boxes : [...arr] };
     this.changeColor = this.changeColor.bind(this);
   }
 
   changeColor(id) {
-    let newColor = '';
-    for (let i = 0; i < 6; i++) {
-      newColor += randomChar('0123456789ABCDEF');
-    }
-
     const boxes = [...this.state.boxes];
-    boxes[id] = newColor;
+    boxes[id] = this.pickNewColor(this.state.boxes[id]);
     this.setState({ boxes });
+  }
+
+  pickNewColor(oldColor) {
+    let newColor = '';
+    do {
+      newColor = randomHexStr(this.props.hexLength);
+    } while (newColor === oldColor)
+    return newColor;
   }
 
   render() {
